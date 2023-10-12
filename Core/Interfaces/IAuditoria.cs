@@ -2,7 +2,7 @@ using Core.Entities;
 
 namespace Core.Interfaces
 {
-    public interface IAudtioria : IGenericRepository<Auditoria>
+    public interface IAuditoria : IGenericRepository<Auditoria>
     {
          
     }
