@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class Radicados : BaseEntities
+    public class Radicados : BaseEntity
     {
         [Required]
         public DateTime FechaCreacion { get; set; }

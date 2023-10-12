@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class BlockChain : BaseEntities
+    public class BlockChain : BaseEntity
     {
         [Required]
         public int IdNotificacion { get; set; }
@@ -10,14 +10,14 @@ namespace Core.Entities
         public int IdHiloRespuesta { get; set; }
         [Required]
         public int IdAuditoria { get; set; } 
-        public Auditoria Auditoria { get; set; } 
         [Required]
         public string HashGenerado { get; set; }
         [Required]
         public DateTime FechaCreacion { get; set; }
         [Required]
         public DateTime FechaModificacion { get; set; }
-        public TipoNotificacion TipoNotificacionn { get; set; }
+        public TipoNotificacion TipoNotificacion { get; set; }
         public HiloRespuestaNotificacion HiloRespuestaNotificacion { get; set; }
+        public Auditoria Auditoria { get; set; } 
     }
 }

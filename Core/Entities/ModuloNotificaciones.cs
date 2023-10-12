@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class ModuloNotificaciones : BaseEntities
+    public class ModuloNotificaciones : BaseEntity
     {
         [Required]
         public string AsuntoNotificacion { get; set; }

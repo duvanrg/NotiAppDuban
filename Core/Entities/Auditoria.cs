@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class Auditoria : BaseEntities
+    public class Auditoria : BaseEntity
     {
         [Required]
         public string NombreUsuario { get; set; }

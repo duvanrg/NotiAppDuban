@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class RolVsMaestro : BaseEntities
+    public class RolVsMaestro : BaseEntity
     {
         [Required]
         public int IdRol { get; set; }

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class TipoRequerimiento : BaseEntities
+    public class TipoRequerimiento : BaseEntity
     {
         [Required]
         public string Nombre { get; set; }

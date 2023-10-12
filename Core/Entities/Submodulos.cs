@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class Submodulos : BaseEntities
+    public class Submodulos : BaseEntity
     {
         [Required]
         public string NombreSubmodulo { get; set; }
@@ -10,5 +10,7 @@ namespace Core.Entities
         public DateTime FechaCreacion { get; set; }
         [Required]
         public DateTime FechaModificacion { get; set; }
+        public ICollection<MaestrosVsSubmodulos> MaestrosVsSubmodulos { get; set; }
+
     }
 }

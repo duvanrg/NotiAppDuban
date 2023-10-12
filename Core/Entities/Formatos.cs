@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class Formatos : BaseEntities
+    public class Formatos : BaseEntity
     {
         [Required]
         public string NombreFormato { get; set; }
