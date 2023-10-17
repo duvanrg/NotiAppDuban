@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.Entities
 {
-    public class ModulosMaestros : BaseEntity
+    public class ModuloMaestros : BaseEntity
     {
         [Required]
         public string NombreModulo { get; set; }
