@@ -4,7 +4,7 @@ using Infrastructure.Data;
 
 namespace Infrastructure.repositories
 {
-    public class ModuloMaestrosRepo : GenericRepository<ModulosMaestros>, IModuloMaestros
+    public class ModuloMaestrosRepo : GenericRepository<ModuloMaestros>, IModuloMaestros
     {
         private readonly ApiContext _context;
         public ModuloMaestrosRepo(ApiContext context) : base(context)

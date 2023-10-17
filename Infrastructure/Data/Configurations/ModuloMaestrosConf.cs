@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistencia.Data.Configuration
 {
-    public class ModuloMaestrosConf : IEntityTypeConfiguration<ModulosMaestros>
+    public class ModuloMaestrosConf : IEntityTypeConfiguration<ModuloMaestros>
     {
-        public void Configure(EntityTypeBuilder<ModulosMaestros> builder)
+        public void Configure(EntityTypeBuilder<ModuloMaestros> builder)
         {
             builder.ToTable("ModulosMaestros");
             builder.HasKey(e => e.Id);

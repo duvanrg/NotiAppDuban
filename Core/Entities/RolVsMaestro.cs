@@ -13,6 +13,6 @@ namespace Core.Entities
         [Required]
         public DateTime FechaModificacion { get; set; }
         public Rol Rol { get; set; }
-        public ModulosMaestros ModulosMaestros { get; set; }
+        public ModuloMaestros ModulosMaestros { get; set; }
     }
 }

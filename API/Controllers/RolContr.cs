@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<Rol>> Post(RolDto rolDto)
         {
             var rol = _mapper.Map<Rol>(rolDto);
+            if (rol.FechaCreacion == DateTime.MinValue) rol.FechaCreacion = DateTime.Now;
             _unitOfWork.Roles.Add(rol);
             await _unitOfWork.SaveAsync();
             if (rol == null) return BadRequest();
@@ -57,6 +58,7 @@ namespace API.Controllers
             if (rolDto == null) return NotFound();
             var rol = _mapper.Map<Rol>(rolDto);
             rol.Id = id;
+            if (rol.FechaModificacion == DateTime.MinValue )  rol.FechaModificacion = DateTime.Now;
             _unitOfWork.Roles.Update(rol);
             await _unitOfWork.SaveAsync();
             return rolDto;

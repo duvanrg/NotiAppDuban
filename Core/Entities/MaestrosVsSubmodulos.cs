@@ -13,7 +13,7 @@ namespace Core.Entities
         [Required]
         public DateTime FechaModificacion { get; set; }
         public Submodulos Submodulos { get; set; }
-        public ModulosMaestros ModulosMaestros { get; set; }
+        public ModuloMaestros ModulosMaestros { get; set; }
         public ICollection<GenericosVsSubmodulos> GenericosVsSubmodulos { get; set; }
         
         
