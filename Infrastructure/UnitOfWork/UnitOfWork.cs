@@ -17,6 +17,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private HilosRespuestaNotificacionRepo _HilosRespuestaNotificaciones;
     private MaestrosVsSubmodulosRepo _MaestrosVsSubmodulosS;
     private ModuloNotificacionesRepo _ModuloNotificacionesS;
+    private ModuloMaestrosRepo _ModuloMaestrosS;
     private PermisosGenericosRepo _PermisosGenericosS;
     private RadicadosRepo _RadicadosS;
     private RolRepo _roles;
@@ -94,6 +95,14 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         {
             if(_ModuloNotificacionesS == null) _ModuloNotificacionesS = new ModuloNotificacionesRepo(_context);
             return _ModuloNotificacionesS;
+        }
+    }
+    public IModuloMaestros ModuloMaestrosS
+    {
+        get
+        {
+            if(_ModuloMaestrosS == null) _ModuloMaestrosS = new ModuloMaestrosRepo(_context);
+            return _ModuloMaestrosS;
         }
     }
     public IPermisosGenericos PermisosGenericosS

@@ -10,6 +10,7 @@ namespace Core.Interfaces
         IHilosRespuestaNotificacion HilosRespuestaNotificaciones { get;}
         IMaestrosVsSubmodulos MaestrosVsSubmodulosS { get;}
         IModuloNotificaciones ModuloNotificacionesS { get;}
+        IModuloMaestros ModuloMaestrosS{ get;}
         IPermisosGenericos PermisosGenericosS { get;}
         IRadicados RadicadosS { get;}
         IRol Roles { get;}
