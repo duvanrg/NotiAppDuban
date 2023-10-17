@@ -13,7 +13,7 @@ namespace ApiAnimals.Profiles
             CreateMap<EstadoNotificacion, EstadoNotificacionDto>().ReverseMap();
             CreateMap<Formatos, FormatosDto>().ReverseMap();
             CreateMap<GenericosVsSubmodulos, GenericosVsSubmodulosDto>().ReverseMap();
-            CreateMap<HiloRespuestaNotificacion, HilosRespuestaNotificacionDto>().ReverseMap();
+            CreateMap<HiloRespuestaNotificacion, HiloRespuestaNotificacionDto>().ReverseMap();
             CreateMap<MaestrosVsSubmodulos, MaestrosVsSubmodulosDto>().ReverseMap();
             CreateMap<ModuloNotificaciones, ModuloNotificacionesDto>().ReverseMap();
             CreateMap<PermisosGenericos, PermisosGenericosDto>().ReverseMap();
