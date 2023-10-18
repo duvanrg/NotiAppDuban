@@ -331,7 +331,7 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("timestamp");
+                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime");

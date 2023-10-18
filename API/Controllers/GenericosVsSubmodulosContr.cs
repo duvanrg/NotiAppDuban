@@ -44,6 +44,7 @@ namespace API.Controllers
         public async Task<ActionResult<GenericosVsSubmodulos>> Post(GenericosVsSubmodulosDto genericosVsSubmodulosDto)
         {
             var genericoVsSubmodulo = _mapper.Map<GenericosVsSubmodulos>(genericosVsSubmodulosDto);
+            if (genericoVsSubmodulo.FechaCreacion == DateTime.MinValue) genericoVsSubmodulo.FechaCreacion = DateTime.Now;
             _unitOfWork.GenericosVsSubmodulosS.Add(genericoVsSubmodulo);
             await _unitOfWork.SaveAsync();
             if (genericoVsSubmodulo == null) return BadRequest();
@@ -57,11 +58,14 @@ namespace API.Controllers
         public async Task<ActionResult<GenericosVsSubmodulosDto>> Put(int id, [FromBody] GenericosVsSubmodulosDto genericosVsSubmodulosDto)
         {
             if (genericosVsSubmodulosDto == null) return NotFound();
-            var genericoVsSubmodulo = _mapper.Map<GenericosVsSubmodulos>(genericosVsSubmodulosDto);
-            genericoVsSubmodulo.Id = id;
-            _unitOfWork.GenericosVsSubmodulosS.Update(genericoVsSubmodulo);
+            if (genericosVsSubmodulosDto.Id == 0) genericosVsSubmodulosDto.Id = id;
+            if (genericosVsSubmodulosDto.Id != id) return BadRequest();
+            var genericosVsSubmodulos = await _unitOfWork.GenericosVsSubmodulosS.GetByIdAsync(id);
+            _mapper.Map(genericosVsSubmodulosDto, genericosVsSubmodulos);
+            genericosVsSubmodulos.FechaModificacion = DateTime.Now;
+            _unitOfWork.GenericosVsSubmodulosS.Update(genericosVsSubmodulos);
             await _unitOfWork.SaveAsync();
-            return genericosVsSubmodulosDto;
+            return _mapper.Map<GenericosVsSubmodulosDto>(genericosVsSubmodulos);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

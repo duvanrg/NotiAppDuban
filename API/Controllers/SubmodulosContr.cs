@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<Submodulos>> Post(SubmodulosDto submodulosDto)
         {
             var submodulos = _mapper.Map<Submodulos>(submodulosDto);
+            if (submodulos.FechaCreacion == DateTime.MinValue) submodulos.FechaCreacion = DateTime.Now;
             _unitOfWork.SubmodulosS.Add(submodulos);
             await _unitOfWork.SaveAsync();
             if (submodulos == null) return BadRequest();
@@ -55,11 +56,14 @@ namespace API.Controllers
         public async Task<ActionResult<SubmodulosDto>> Put(int id, [FromBody] SubmodulosDto submodulosDto)
         {
             if (submodulosDto == null) return NotFound();
-            var submodulos = _mapper.Map<Submodulos>(submodulosDto);
-            submodulos.Id = id;
+            if (submodulosDto.Id == 0) submodulosDto.Id = id;
+            if (submodulosDto.Id != id) return BadRequest();
+            var submodulos = await _unitOfWork.SubmodulosS.GetByIdAsync(id);
+            _mapper.Map(submodulosDto, submodulos);
+            submodulos.FechaModificacion = DateTime.Now;
             _unitOfWork.SubmodulosS.Update(submodulos);
             await _unitOfWork.SaveAsync();
-            return submodulosDto;
+            return _mapper.Map<SubmodulosDto>(submodulos);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

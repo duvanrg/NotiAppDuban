@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<TipoRequerimiento>> Post(TipoRequerimientoDto tipoRequerimientoDto)
         {
             var tipoRequerimiento = _mapper.Map<TipoRequerimiento>(tipoRequerimientoDto);
+            if (tipoRequerimiento.FechaCreacion == DateTime.MinValue) tipoRequerimiento.FechaCreacion = DateTime.Now;
             _unitOfWork.TiposRequerimientos.Add(tipoRequerimiento);
             await _unitOfWork.SaveAsync();
             if (tipoRequerimiento == null) return BadRequest();
@@ -55,11 +56,14 @@ namespace API.Controllers
         public async Task<ActionResult<TipoRequerimientoDto>> Put(int id, [FromBody] TipoRequerimientoDto tipoRequerimientoDto)
         {
             if (tipoRequerimientoDto == null) return NotFound();
-            var tipoRequerimiento = _mapper.Map<TipoRequerimiento>(tipoRequerimientoDto);
-            tipoRequerimiento.Id = id;
+            if (tipoRequerimientoDto.Id == 0) tipoRequerimientoDto.Id = id;
+            if (tipoRequerimientoDto.Id != id) return BadRequest();
+            var tipoRequerimiento = await _unitOfWork.TiposRequerimientos.GetByIdAsync(id);
+            _mapper.Map(tipoRequerimientoDto, tipoRequerimiento);
+            tipoRequerimiento.FechaModificacion = DateTime.Now;
             _unitOfWork.TiposRequerimientos.Update(tipoRequerimiento);
             await _unitOfWork.SaveAsync();
-            return tipoRequerimientoDto;
+            return _mapper.Map<TipoRequerimientoDto>(tipoRequerimiento);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

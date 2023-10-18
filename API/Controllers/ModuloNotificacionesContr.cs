@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<ModuloNotificaciones>> Post(ModuloNotificacionesDto moduloNotificacionesDto)
         {
             var moduloNotificaciones = _mapper.Map<ModuloNotificaciones>(moduloNotificacionesDto);
+            if (moduloNotificaciones.FechaCreacion == DateTime.MinValue) moduloNotificaciones.FechaCreacion = DateTime.Now;
             _unitOfWork.ModuloNotificacionesS.Add(moduloNotificaciones);
             await _unitOfWork.SaveAsync();
             if (moduloNotificaciones == null) return BadRequest();
@@ -55,11 +56,14 @@ namespace API.Controllers
         public async Task<ActionResult<ModuloNotificacionesDto>> Put(int id, [FromBody] ModuloNotificacionesDto moduloNotificacionesDto)
         {
             if (moduloNotificacionesDto == null) return NotFound();
-            var moduloNotificaciones = _mapper.Map<ModuloNotificaciones>(moduloNotificacionesDto);
-            moduloNotificaciones.Id = id;
+            if (moduloNotificacionesDto.Id == 0) moduloNotificacionesDto.Id = id;
+            if (moduloNotificacionesDto.Id != id) return BadRequest();
+            var moduloNotificaciones = await _unitOfWork.ModuloNotificacionesS.GetByIdAsync(id);
+            _mapper.Map(moduloNotificacionesDto, moduloNotificaciones);
+            moduloNotificaciones.FechaModificacion = DateTime.Now;
             _unitOfWork.ModuloNotificacionesS.Update(moduloNotificaciones);
             await _unitOfWork.SaveAsync();
-            return moduloNotificacionesDto;
+            return _mapper.Map<ModuloNotificacionesDto>(moduloNotificaciones);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

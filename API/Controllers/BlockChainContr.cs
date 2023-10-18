@@ -45,6 +45,7 @@ namespace API.Controllers
         {
             var blockChain = _mapper.Map<BlockChain>(blockChainDto);
             _unitOfWork.BlockChains.Add(blockChain);
+            if (blockChain.FechaCreacion == DateTime.MinValue) blockChain.FechaCreacion = DateTime.Now;
             await _unitOfWork.SaveAsync();
             if (blockChain == null) return BadRequest();
             blockChainDto.Id = blockChain.Id;
@@ -57,11 +58,14 @@ namespace API.Controllers
         public async Task<ActionResult<BlockChainDto>> Put(int id, [FromBody] BlockChainDto blockChainDto)
         {
             if (blockChainDto == null) return NotFound();
-            var blockChain = _mapper.Map<BlockChain>(blockChainDto);
-            blockChain.Id = id;
+            if (blockChainDto.Id == 0) blockChainDto.Id = id;
+            if (blockChainDto.Id != id) return BadRequest();
+            var blockChain = await _unitOfWork.BlockChains.GetByIdAsync(id);
+            _mapper.Map(blockChainDto, blockChain);
+            blockChain.FechaModificacion = DateTime.Now;
             _unitOfWork.BlockChains.Update(blockChain);
             await _unitOfWork.SaveAsync();
-            return blockChainDto;
+            return _mapper.Map<BlockChainDto>(blockChain);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

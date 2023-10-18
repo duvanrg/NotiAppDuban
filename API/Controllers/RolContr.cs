@@ -15,8 +15,8 @@ namespace API.Controllers
 
         public RolContr(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;   
-            _mapper = mapper;   
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -56,13 +56,16 @@ namespace API.Controllers
         public async Task<ActionResult<RolDto>> Put(int id, [FromBody] RolDto rolDto)
         {
             if (rolDto == null) return NotFound();
-            var rol = _mapper.Map<Rol>(rolDto);
-            rol.Id = id;
-            if (rol.FechaModificacion == DateTime.MinValue )  rol.FechaModificacion = DateTime.Now;
+            if (rolDto.Id == 0) rolDto.Id = id;
+            if (rolDto.Id != id) return BadRequest();
+            var rol = await _unitOfWork.Roles.GetByIdAsync(id);
+            _mapper.Map(rolDto, rol);
+            rol.FechaModificacion = DateTime.Now;
             _unitOfWork.Roles.Update(rol);
             await _unitOfWork.SaveAsync();
-            return rolDto;
+            return _mapper.Map<RolDto>(rol);
         }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

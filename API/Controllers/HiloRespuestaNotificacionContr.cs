@@ -44,6 +44,7 @@ namespace API.Controllers
         public async Task<ActionResult<HiloRespuestaNotificacion>> Post(HiloRespuestaNotificacionDto hiloRespuestaNotificacionDto)
         {
             var hiloRespuestaNotificacion = _mapper.Map<HiloRespuestaNotificacion>(hiloRespuestaNotificacionDto);
+            if (hiloRespuestaNotificacion.FechaCreacion == DateTime.MinValue) hiloRespuestaNotificacion.FechaCreacion = DateTime.Now;
             _unitOfWork.HilosRespuestaNotificaciones.Add(hiloRespuestaNotificacion);
             await _unitOfWork.SaveAsync();
             if (hiloRespuestaNotificacion == null) return BadRequest();
@@ -57,11 +58,14 @@ namespace API.Controllers
         public async Task<ActionResult<HiloRespuestaNotificacionDto>> Put(int id, [FromBody] HiloRespuestaNotificacionDto hiloRespuestaNotificacionDto)
         {
             if (hiloRespuestaNotificacionDto == null) return NotFound();
-            var hiloRespuestaNotificacion = _mapper.Map<HiloRespuestaNotificacion>(hiloRespuestaNotificacionDto);
-            hiloRespuestaNotificacion.Id = id;
-            _unitOfWork.HilosRespuestaNotificaciones .Update(hiloRespuestaNotificacion);
+            if (hiloRespuestaNotificacionDto.Id == 0) hiloRespuestaNotificacionDto.Id = id;
+            if (hiloRespuestaNotificacionDto.Id != id) return BadRequest();
+            var hiloRespuestaNotificacion = await _unitOfWork.HilosRespuestaNotificaciones.GetByIdAsync(id);
+            _mapper.Map(hiloRespuestaNotificacionDto, hiloRespuestaNotificacion);
+            hiloRespuestaNotificacion.FechaModificacion = DateTime.Now;
+            _unitOfWork.HilosRespuestaNotificaciones.Update(hiloRespuestaNotificacion);
             await _unitOfWork.SaveAsync();
-            return hiloRespuestaNotificacionDto;
+            return _mapper.Map<HiloRespuestaNotificacionDto>(hiloRespuestaNotificacion);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

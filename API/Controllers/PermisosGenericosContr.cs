@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<PermisosGenericos>> Post(PermisosGenericosDto permisosGenericosDto)
         {
             var permisosGenericos = _mapper.Map<PermisosGenericos>(permisosGenericosDto);
+            if (permisosGenericos.FechaCreacion == DateTime.MinValue) permisosGenericos.FechaCreacion = DateTime.Now;
             _unitOfWork.PermisosGenericosS.Add(permisosGenericos);
             await _unitOfWork.SaveAsync();
             if (permisosGenericos == null) return BadRequest();
@@ -55,11 +56,14 @@ namespace API.Controllers
         public async Task<ActionResult<PermisosGenericosDto>> Put(int id, [FromBody] PermisosGenericosDto permisosGenericosDto)
         {
             if (permisosGenericosDto == null) return NotFound();
-            var permisosGenericos = _mapper.Map<PermisosGenericos>(permisosGenericosDto);
-            permisosGenericos.Id = id;
+            if (permisosGenericosDto.Id == 0) permisosGenericosDto.Id = id;
+            if (permisosGenericosDto.Id != id) return BadRequest();
+            var permisosGenericos = await _unitOfWork.PermisosGenericosS.GetByIdAsync(id);
+            _mapper.Map(permisosGenericosDto, permisosGenericos);
+            permisosGenericos.FechaModificacion = DateTime.Now;
             _unitOfWork.PermisosGenericosS.Update(permisosGenericos);
             await _unitOfWork.SaveAsync();
-            return permisosGenericosDto;
+            return _mapper.Map<PermisosGenericosDto>(permisosGenericos);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

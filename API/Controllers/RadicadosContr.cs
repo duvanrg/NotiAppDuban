@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<Radicados>> Post(RadicadosDto radicadosDto)
         {
             var radicados = _mapper.Map<Radicados>(radicadosDto);
+            if (radicados.FechaCreacion == DateTime.MinValue) radicados.FechaCreacion = DateTime.Now;
             _unitOfWork.RadicadosS.Add(radicados);
             await _unitOfWork.SaveAsync();
             if (radicados == null) return BadRequest();
@@ -55,11 +56,14 @@ namespace API.Controllers
         public async Task<ActionResult<RadicadosDto>> Put(int id, [FromBody] RadicadosDto radicadosDto)
         {
             if (radicadosDto == null) return NotFound();
-            var radicados = _mapper.Map<Radicados>(radicadosDto);
-            radicados.Id = id;
+            if (radicadosDto.Id == 0) radicadosDto.Id = id;
+            if (radicadosDto.Id != id) return BadRequest();
+            var radicados = await _unitOfWork.RadicadosS.GetByIdAsync(id);
+            _mapper.Map(radicadosDto, radicados);
+            radicados.FechaModificacion = DateTime.Now;
             _unitOfWork.RadicadosS.Update(radicados);
             await _unitOfWork.SaveAsync();
-            return radicadosDto;
+            return _mapper.Map<RadicadosDto>(radicados);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

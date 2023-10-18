@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<MaestrosVsSubmodulos>> Post(MaestrosVsSubmodulosDto maestrosVsSubmodulosDto)
         {
             var maestroVsSubmodulo = _mapper.Map<MaestrosVsSubmodulos>(maestrosVsSubmodulosDto);
+            if (maestroVsSubmodulo.FechaCreacion == DateTime.MinValue) maestroVsSubmodulo.FechaCreacion = DateTime.Now;
             _unitOfWork.MaestrosVsSubmodulosS.Add(maestroVsSubmodulo);
             await _unitOfWork.SaveAsync();
             if (maestroVsSubmodulo == null) return BadRequest();
@@ -55,11 +56,14 @@ namespace API.Controllers
         public async Task<ActionResult<MaestrosVsSubmodulosDto>> Put(int id, [FromBody] MaestrosVsSubmodulosDto maestrosVsSubmodulosDto)
         {
             if (maestrosVsSubmodulosDto == null) return NotFound();
-            var maestroVsSubmodulo = _mapper.Map<MaestrosVsSubmodulos>(maestrosVsSubmodulosDto);
-            maestroVsSubmodulo.Id = id;
-            _unitOfWork.MaestrosVsSubmodulosS.Update(maestroVsSubmodulo);
+            if (maestrosVsSubmodulosDto.Id == 0) maestrosVsSubmodulosDto.Id = id;
+            if (maestrosVsSubmodulosDto.Id != id) return BadRequest();
+            var maestrosVsSubmodulos = await _unitOfWork.MaestrosVsSubmodulosS.GetByIdAsync(id);
+            _mapper.Map(maestrosVsSubmodulosDto, maestrosVsSubmodulos);
+            maestrosVsSubmodulos.FechaModificacion = DateTime.Now;
+            _unitOfWork.MaestrosVsSubmodulosS.Update(maestrosVsSubmodulos);
             await _unitOfWork.SaveAsync();
-            return maestrosVsSubmodulosDto;
+            return _mapper.Map<MaestrosVsSubmodulosDto>(maestrosVsSubmodulos);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

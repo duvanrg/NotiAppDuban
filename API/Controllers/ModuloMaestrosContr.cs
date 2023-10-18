@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<ModuloMaestros>> Post(ModuloMaestrosDto moduloMaestrosDto)
         {
             var modulosMaestros = _mapper.Map<ModuloMaestros>(moduloMaestrosDto);
+            if (modulosMaestros.FechaCreacion == DateTime.MinValue) modulosMaestros.FechaCreacion = DateTime.Now;
             _unitOfWork.ModuloMaestrosS.Add(modulosMaestros);
             await _unitOfWork.SaveAsync();
             if (modulosMaestros == null) return BadRequest();
@@ -55,11 +56,14 @@ namespace API.Controllers
         public async Task<ActionResult<ModuloMaestrosDto>> Put(int id, [FromBody] ModuloMaestrosDto moduloMaestrosDto)
         {
             if (moduloMaestrosDto == null) return NotFound();
-            var moduloMaestros = _mapper.Map<ModuloMaestros>(moduloMaestrosDto);
-            moduloMaestros.Id = id;
+            if (moduloMaestrosDto.Id == 0) moduloMaestrosDto.Id = id;
+            if (moduloMaestrosDto.Id != id) return BadRequest();
+            var moduloMaestros = await _unitOfWork.ModuloMaestrosS.GetByIdAsync(id);
+            _mapper.Map(moduloMaestrosDto, moduloMaestros);
+            moduloMaestros.FechaModificacion = DateTime.Now;
             _unitOfWork.ModuloMaestrosS.Update(moduloMaestros);
             await _unitOfWork.SaveAsync();
-            return moduloMaestrosDto;
+            return _mapper.Map<ModuloMaestrosDto>(moduloMaestros);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

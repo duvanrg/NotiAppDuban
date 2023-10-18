@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20231017165458_TestMigrations")]
-    partial class TestMigrations
+    [Migration("20231018121140_MigrationDatabase")]
+    partial class MigrationDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

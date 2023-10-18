@@ -44,6 +44,7 @@ namespace API.Controllers
         public async Task<ActionResult<Formatos>> Post(FormatosDto formatosDto)
         {
             var formatos = _mapper.Map<Formatos>(formatosDto);
+            if (formatos.FechaCreacion == DateTime.MinValue) formatos.FechaCreacion = DateTime.Now;
             _unitOfWork.Formatos.Add(formatos);
             await _unitOfWork.SaveAsync();
             if (formatos == null) return BadRequest();
@@ -57,11 +58,14 @@ namespace API.Controllers
         public async Task<ActionResult<FormatosDto>> Put(int id, [FromBody] FormatosDto formatosDto)
         {
             if (formatosDto == null) return NotFound();
-            var formato = _mapper.Map<Formatos>(formatosDto);
-            formato.Id = id;
-            _unitOfWork.Formatos.Update(formato);
+            if (formatosDto.Id == 0) formatosDto.Id = id;
+            if (formatosDto.Id != id) return BadRequest();
+            var formatos = await _unitOfWork.Formatos.GetByIdAsync(id);
+            _mapper.Map(formatosDto, formatos);
+            formatos.FechaModificacion = DateTime.Now;
+            _unitOfWork.Formatos.Update(formatos);
             await _unitOfWork.SaveAsync();
-            return formatosDto;
+            return _mapper.Map<FormatosDto>(formatos);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

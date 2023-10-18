@@ -11,7 +11,7 @@ namespace API.Dtos
         public int IdFormato { get; set; }
         public int IdRequerimiento { get; set; }
         public string TextoNotificacion { get; set; }
-        public DateTime FechaCreacion { get; set; }
-        public DateTime FechaModificacion { get; set; }
+        // public DateTime FechaCreacion { get; set; }
+        // public DateTime FechaModificacion { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace API.Dtos
         public int IdHiloRespuesta { get; set; }
         public int IdAuditoria { get; set; } 
         public string HashGenerado { get; set; }
-        public DateTime FechaCreacion { get; set; }
-        public DateTime FechaModificacion { get; set; }
+        // public DateTime FechaCreacion { get; set; }
+        // public DateTime FechaModificacion { get; set; }
     }
 }

@@ -44,6 +44,7 @@ namespace API.Controllers
         public async Task<ActionResult<Auditoria>> Post(AuditoriaDto auditoriaDto)
         {
             var auditoria = _mapper.Map<Auditoria>(auditoriaDto);
+            if (auditoria.FechaCreacion == DateTime.MinValue) auditoria.FechaCreacion = DateTime.Now;
             _unitOfWork.Auditorias.Add(auditoria);
             await _unitOfWork.SaveAsync();
             if (auditoria == null) return BadRequest();
@@ -57,8 +58,11 @@ namespace API.Controllers
         public async Task<ActionResult<AuditoriaDto>> Put(int id, [FromBody] AuditoriaDto auditoriaDto)
         {
             if (auditoriaDto == null) return NotFound();
-            var auditoria = _mapper.Map<Auditoria>(auditoriaDto);
-            auditoria.Id = id;
+            if (auditoriaDto.Id == 0) auditoriaDto.Id = id;
+            if (auditoriaDto.Id != id) return BadRequest();
+            var auditoria = await _unitOfWork.Auditorias.GetByIdAsync(id);
+            _mapper.Map(auditoriaDto, auditoria);
+            auditoria.FechaModificacion = DateTime.Now;
             _unitOfWork.Auditorias.Update(auditoria);
             await _unitOfWork.SaveAsync();
             return auditoriaDto;

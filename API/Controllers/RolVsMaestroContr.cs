@@ -42,6 +42,7 @@ namespace API.Controllers
         public async Task<ActionResult<RolVsMaestro>> Post(RolVsMaestroDto rolVsMaestroDto)
         {
             var rolVsMaestro = _mapper.Map<RolVsMaestro>(rolVsMaestroDto);
+            if (rolVsMaestro.FechaCreacion == DateTime.MinValue) rolVsMaestro.FechaCreacion = DateTime.Now;
             _unitOfWork.RolesVsMaestros.Add(rolVsMaestro);
             await _unitOfWork.SaveAsync();
             if (rolVsMaestro == null) return BadRequest();
@@ -55,11 +56,14 @@ namespace API.Controllers
         public async Task<ActionResult<RolVsMaestroDto>> Put(int id, [FromBody] RolVsMaestroDto rolVsMaestroDto)
         {
             if (rolVsMaestroDto == null) return NotFound();
-            var rolVsMaestro = _mapper.Map<RolVsMaestro>(rolVsMaestroDto);
-            rolVsMaestro.Id = id;
+            if (rolVsMaestroDto.Id == 0) rolVsMaestroDto.Id = id;
+            if (rolVsMaestroDto.Id != id) return BadRequest();
+            var rolVsMaestro = await _unitOfWork.RolesVsMaestros.GetByIdAsync(id);
+            _mapper.Map(rolVsMaestroDto, rolVsMaestro);
+            rolVsMaestro.FechaModificacion = DateTime.Now;
             _unitOfWork.RolesVsMaestros.Update(rolVsMaestro);
             await _unitOfWork.SaveAsync();
-            return rolVsMaestroDto;
+            return _mapper.Map<RolVsMaestroDto>(rolVsMaestro);
         }
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
