@@ -8,12 +8,12 @@ NotiApp es una aplicación de notificaciones desarrollada en .NET Core que utili
 - [Requisitos del sistema](#requisitos-del-sistema)
 - [Configuración](#configuración)
 - [Entidades](#entidades)
+- [Unit of Work](#unit_of_work)
 - [Migraciones de Base de Datos](#migraciones-de-Base-de-Datos)
 - [Packages](#packages)
 - [API](#api)
 - [Core](#core)
 - [Infrastucture](#infrastucture)
-- [Packages Utilizados](#packages-utilizados)
 - [Uso](#uso)
 - [Contribución](#contribución)
 - [Autor](#autor)
@@ -56,6 +56,10 @@ La aplicación sigue una estructura de tres capas:
   - Submodulos
   - TipoNotificacion
   - TipoRequerimiento
+
+  ## Unit of Work
+
+  El patrón Unit of Work se implementa en la capa Infrastructure a través de la interfaz `IUnitOfWork`. Esta interfaz proporciona un mecanismo para realizar operaciones transaccionales y coordinar las operaciones en la base de datos. Consulta la implementación en el código fuente de Infrastructure para obtener más detalles sobre cómo se utiliza en la aplicación.
 
   ## Migraciones de Base de Datos
 
@@ -104,7 +108,7 @@ La aplicación sigue una estructura de tres capas:
   
   ## Uso
   
-
+- Clona el repositorio
 - Actualiza los paquetes usando:
 ```powershell
 dotnet restore
@@ -122,10 +126,6 @@ dotnet build
   ```
 - Accede a los controladores de API para interactuar con las entidades, por ejemplo, `/auditoria` o `/blockchain`.
 
-## Unit of Work
-
-El patrón Unit of Work se implementa en la capa Infrastructure a través de la interfaz `IUnitOfWork`. Esta interfaz proporciona un mecanismo para realizar operaciones transaccionales y coordinar las operaciones en la base de datos. Consulta la implementación en el código fuente de Infrastructure para obtener más detalles sobre cómo se utiliza en la aplicación.
-
 ## Contribución
 Si deseas contribuir a este proyecto, sigue estos pasos:
 
@@ -135,8 +135,9 @@ Si deseas contribuir a este proyecto, sigue estos pasos:
 4. Desarrolla y realiza pruebas en tu rama.
 5. Asegúrate de que las pruebas pasen y sigue las guías de estilo del proyecto.
 6. Envía una solicitud de extracción (pull request) detallando tus cambios.
+
 ## Autor
-Duban Rodriguez - Initial work - Campusland
+Duban Rodriguez - Initial work with EF - Campusland
 
 ## Licencia
-Este proyecto está bajo la Licencia XYZ. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+Este proyecto está bajo la Licencia de Entity Framework 5 (ENU). Consulta el archivo [LICENSE](https://learn.microsoft.com/es-es/ef/ef6/resources/licenses/ef5/enu) para más detalles.
